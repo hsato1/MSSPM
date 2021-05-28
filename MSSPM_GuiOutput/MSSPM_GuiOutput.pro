@@ -9,7 +9,7 @@ QT       += core gui charts sql datavisualization uitools
 TARGET = MSSPM_GuiOutput
 TEMPLATE = lib
 
-PRECOMPILED_HEADER = /home/rklasky/workspaceQtCreator/MSSPM/MSSPM_GuiSetup/precompiled_header.h
+PRECOMPILED_HEADER = /Users/satouhiroshiki/Desktop/NoaaInternshipGit/MSSPM/MSSPM_GuiSetup/precompiled_header.h
 CONFIG += precompile_header
 
 DEFINES += MSSPM_GUIOUTPUT_LIBRARY
@@ -38,16 +38,37 @@ unix {
     INSTALLS += target
 }
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfUtilities
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfUtilities
-else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfUtilities
+INCLUDEPATH += "/Users/satouhiroshiki/boost/boost_1_76_0/"
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfUtilities
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfUtilities
+#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfUtilities
+
+#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
+#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
+
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfDatabase
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfDatabase
+#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfDatabase
+
+#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
+#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
+
+### library import for mac
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfUtilities.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfUtilities.1.0.0
+else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfUtilities.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfDatabase
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfDatabase
-else:unix: LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfDatabase
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfDatabase.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfDatabase.1.0.0
+else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfDatabase.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase

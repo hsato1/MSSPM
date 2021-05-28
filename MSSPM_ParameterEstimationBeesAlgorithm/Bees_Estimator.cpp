@@ -57,8 +57,8 @@ Bees_Estimator::estimateParameters(nmfStructsQt::ModelDataStruct &beeStruct,
     std::string errorMsg;
     std::string bestFitnessStr;
     std::vector<double> lastBestParameters;
-    std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
-    std::chrono::_V2::system_clock::time_point startTimeSpecies;
+//    std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
+//    std::chrono::_V2::system_clock::time_point startTimeSpecies;
     std::vector<double> EstParameters;
     std::vector<double> MeanEstParameters;
     std::vector<double> stdDevParameters;
@@ -87,7 +87,7 @@ Bees_Estimator::estimateParameters(nmfStructsQt::ModelDataStruct &beeStruct,
     nmfUtils::initialize(m_EstBetaGuilds, NumSpeciesOrGuilds,NumGuilds);
     nmfUtils::initialize(m_EstBetaGuildsGuilds, NumGuilds,   NumGuilds);
 
-    startTimeSpecies = nmfUtils::startTimer();
+//    startTimeSpecies = nmfUtils::startTimer();
 std::cout << "Bees num estimate boxes: " << beeStruct.EstimateRunBoxes.size() << std::endl;
 std::cout << "Bees: isAMultiRun: " << isAMultiRun << std::endl;
 
@@ -212,10 +212,10 @@ std::cout << "subRunNum: " << subRunNum << std::endl;
                                  beeStruct.MultiRunModelFilename);
     }
 
-    std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtils::elapsedTime(startTime);
-    std::cout << elapsedTimeStr << std::endl;
+//    std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtils::elapsedTime(startTime);
+//    std::cout << elapsedTimeStr << std::endl;
 
-    stopRun(elapsedTimeStr,bestFitnessStr);
+//    stopRun(elapsedTimeStr,bestFitnessStr);
 }
 
 

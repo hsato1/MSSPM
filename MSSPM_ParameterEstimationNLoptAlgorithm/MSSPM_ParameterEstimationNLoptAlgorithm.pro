@@ -6,10 +6,13 @@
 
 QT      -= gui
 QT      += widgets charts
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = MSSPM_ParameterEstimationNLoptAlgorithm
 TEMPLATE = lib
 CONFIG += c++14
+
+
 
 DEFINES += MSSPM_PARAMETERESTIMATIONNLOPTALGORITHM_LIBRARY
 
@@ -31,26 +34,48 @@ HEADERS += \
     NLopt_Estimator.h \
     mainpage.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+#unix {
+#    target.path = /usr/lib
+#    INSTALLS += target
+#}
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+
+INCLUDEPATH += "/Users/satouhiroshiki/boost/boost_1_76_0/"
+#INCLUDEPATH += /usr/local/lib
+#INCLUDEPATH += "/Users/satouhiroshiki/nlopt/build"
+
+#unix|win32: LIBS += -L/usr/local/lib -lnlopt # -lnlopt_cxx
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfUtilities
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfUtilities
+#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfUtilities
+
+#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
+#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfUtilities
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfUtilities
-else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfUtilities
+
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfModels
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfModels
+#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfModels
+
+#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfModels
+#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfModels
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfUtilities.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfUtilities.1.0.0
+else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfUtilities.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfModels
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfModels
-else:unix: LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfModels
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfModels.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfModels.1.0.0
+else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfModels.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfModels
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfModels
-
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../nlopt-2.5.0/build/release/ -lnlopt
@@ -60,8 +85,22 @@ else:unix: LIBS += -L$$PWD/../../../nlopt-2.5.0/build/ -lnlopt
 INCLUDEPATH += $$PWD/../../../nlopt-2.5.0/build/src/api
 DEPENDPATH += $$PWD/../../../nlopt-2.5.0/build/src/api
 
-unix|win32: LIBS += -L/usr/local/lib -lnlopt # -lnlopt_cxx
-INCLUDEPATH += /usr/local/lib
 
+unix|win32: LIBS += -L/usr/local/lib -lnlopt # -lnlopt_cxx
+INCLUDEPATH += /Users/satouhiroshiki/nlopt/build
+
+
+
+
+
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../nlopt/build/release/ -lnlopt.0.11.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../nlopt/build/debug/ -lnlopt.0.11.0
+else:unix: LIBS += -L$$PWD/../../../../nlopt/build/ -lnlopt.0.11.0
+
+INCLUDEPATH += $$PWD/../../../../nlopt/src/api
+DEPENDPATH += $$PWD/../../../../nlopt/src/api
 
 
