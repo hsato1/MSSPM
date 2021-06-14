@@ -42,28 +42,6 @@ unix {
 }
 
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfUtilities
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfUtilities
-#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfUtilities
-
-#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
-#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfModels
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfModels
-#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfModels
-
-#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfModels
-#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfModels
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lBeesAlgorithm
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lBeesAlgorithm
-#else:unix: LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lBeesAlgorithm
-
-#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
-#DEPENDPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
-
-
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lBeesAlgorithm.1.0.0
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lBeesAlgorithm.1.0.0
 else:unix: LIBS += -L$$PWD/../../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/ -lBeesAlgorithm.1.0.0
@@ -73,16 +51,26 @@ DEPENDPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
 
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfUtilities.1.0.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfUtilities.1.0.0
-else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfUtilities.1.0.0
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfUtilities.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfUtilities.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfUtilities.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfModels.1.0.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfModels.1.0.0
-else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfModels.1.0.0
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfModels.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfModels.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfModels.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfModels
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfModels
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lBeesAlgorithm.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lBeesAlgorithm.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/ -lBeesAlgorithm.1.0.0
+
+INCLUDEPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
+DEPENDPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm

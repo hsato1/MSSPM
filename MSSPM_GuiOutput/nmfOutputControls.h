@@ -38,7 +38,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QSpinBox>
-
+#include <QScrollArea>
 /**
  * @brief
  * This class contains the widgets and callback functionality for the MSSPM

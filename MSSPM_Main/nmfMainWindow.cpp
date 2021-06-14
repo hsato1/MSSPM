@@ -65,7 +65,6 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     Output_Controls_ptr = nullptr;
     Remora_ptr          = nullptr;
     m_PreferencesDlg    = new QDialog(this);
-    m_TableNamesDlg     = new QDialog(this);
     m_PreferencesWidget = nullptr;
     m_TableNamesWidget  = nullptr;
     m_ViewerWidget      = nullptr;
@@ -110,6 +109,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     readSettingsGuiOrientation(nmfConstantsMSSPM::ResetPositionAlso);
     readSettings();
 
+    m_TableNames = new TableNamesDialog(this, m_DatabasePtr, m_ProjectDatabase);
     initializePreferencesDlg();
 
     // Hide Progress Chart and Log dock widgets. Show them once user does their first MSSPM run.
@@ -130,7 +130,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
         loadDatabase();
     }
 
-    initializeTableNamesDlg();
+//    initializeTableNamesDlg();
     initializeMMode();
     this->setMouseTracking(true);
 
@@ -8535,61 +8535,12 @@ nmfMainWindow::context_Action(bool triggered)
 void
 nmfMainWindow::menu_showTableNames()
 {
-    QLabel* DatabaseNameLB = m_TableNamesWidget->findChild<QLabel*>("DatabaseNameLB");
-    DatabaseNameLB->setText(QString::fromStdString(m_ProjectDatabase));
-    m_TableNamesDlg->show();
+    m_TableNames->loadTableNames();
+    m_TableNames->show();
 }
 
-void
-nmfMainWindow::initializeTableNamesDlg()
-{
-    QUiLoader loader;
-    QFile file(":/forms/Main/TableNamesDlg.ui");
-    file.open(QFile::ReadOnly);
-    m_TableNamesWidget = loader.load(&file,this);
-    file.close();
 
-    QPushButton* TableNamesOkPB = m_TableNamesWidget->findChild<QPushButton*>("TableNamesOkPB");
-    QListWidget* TableNamesLW   = m_TableNamesWidget->findChild<QListWidget*>("TableNamesLW");
-    QLabel*      DatabaseNameLB = m_TableNamesWidget->findChild<QLabel*>("DatabaseNameLB");
 
-    std::vector<std::string> fields;
-    std::map<std::string, std::vector<std::string> > dataMap;
-    std::string queryStr;
-    int NumTables=0;
-
-    fields    = {"table_name"};
-    queryStr  = "SELECT table_name FROM information_schema.tables WHERE ";
-    queryStr += "table_schema = '" + m_ProjectDatabase + "'";
-    dataMap   = m_DatabasePtr->nmfQueryDatabase(queryStr, fields);
-    NumTables = dataMap["table_name"].size();
-
-    if (NumTables <= 0) {
-        TableNamesLW->addItem(QString::fromStdString("No tables found in database: " + m_ProjectDatabase));
-    } else {
-        DatabaseNameLB->setText(QString::fromStdString(m_ProjectDatabase));
-        for (int i=0; i<NumTables; ++i) {
-            TableNamesLW->addItem(QString::fromStdString(std::to_string(i+1) + ". " + dataMap["table_name"][i]));
-        }
-    }
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget(m_TableNamesWidget);
-    m_TableNamesDlg->adjustSize();
-    m_TableNamesDlg->setMinimumWidth(400);
-    m_TableNamesDlg->setMinimumHeight(300);
-    m_TableNamesDlg->setLayout(layout);
-    m_TableNamesDlg->setWindowTitle("Table Names");
-
-    connect(TableNamesOkPB, SIGNAL(clicked()),
-            this,           SLOT(callback_TableNamesOkPB()));
-}
-
-void
-nmfMainWindow::callback_TableNamesOkPB()
-{
-    m_TableNamesDlg->hide();
-}
 
 void
 nmfMainWindow::callback_NavigatorSelectionChanged()

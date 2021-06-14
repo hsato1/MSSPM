@@ -60,6 +60,9 @@ MSSPM_GuiOutputControls::initWidgets()
     QHBoxLayout* ParametersLayt = new QHBoxLayout();
     QHBoxLayout* ScaleLayt  = new QHBoxLayout();
     QHBoxLayout* ShadowLayt = new QHBoxLayout();
+    QWidget *scrollAreaW = new QWidget();
+    QScrollArea *scrollAreaSA = new QScrollArea();
+    QVBoxLayout *controlScrollableLayt = new QVBoxLayout;
     OutputChartTypeLBL      = new QLabel("Chart Type:");
     OutputGroupTypeCMB      = new QComboBox();
     OutputGroupTypeCMB->addItems({"Species:","Guild:","System"});
@@ -143,7 +146,13 @@ MSSPM_GuiOutputControls::initWidgets()
     ShadowLayt->addWidget(OutputShowShadowCB);
     ShadowLayt->addStretch();
     controlLayt->addLayout(ShadowLayt);
-    ControlsGroupBox->setLayout(controlLayt);
+    scrollAreaSA->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollAreaSA->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollAreaW->setLayout(controlLayt);
+    scrollAreaSA->setWidget(scrollAreaW);
+    controlScrollableLayt->addWidget(scrollAreaSA);
+
+    ControlsGroupBox->setLayout(controlScrollableLayt);
     OutputSpeListLBL->setEnabled(false);
     OutputSpeListLV->setEnabled(false);
     OutputSpeListLV->setSelectionMode(QAbstractItemView::ExtendedSelection);

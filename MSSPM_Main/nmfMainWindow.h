@@ -89,6 +89,7 @@
 
 #include "nmfOutputControls.h"
 #include "nmfViewerWidget.h"
+#include "TableNamesDialog.h"
 
 #include <QtDataVisualization>
 #include <QImage>
@@ -278,7 +279,7 @@ private:
     nmfSetup_Tab3*           Setup_Tab3_ptr;
     nmfSetup_Tab4*           Setup_Tab4_ptr;
     QDialog*                 m_PreferencesDlg;
-	QDialog*				 m_TableNamesDlg;
+    TableNamesDialog*        m_TableNames;
     QWidget*                 m_PreferencesWidget;
 	QWidget*                 m_TableNamesWidget;
     QTabWidget*              m_EstimatedParametersTW;
@@ -333,7 +334,6 @@ private:
     void   initLogo();
     void   initPostGuiConnections();
     void   initializePreferencesDlg();
-	void   initializeTableNamesDlg();
     void   initializeMMode();
     void   initializeMModeMain();
     void   initializeMModeViewer();
@@ -1503,7 +1503,7 @@ public slots:
     void menu_toggleManagerMode();
     void menu_toggleManagerModeViewer();
 
-    void callback_TableNamesOkPB();
+
     void callback_PreferencesMShotOkPB();
     void callback_ErrorFound(std::string errorMsg);
     void callback_ManagerModeViewerClose(bool state);

@@ -9,7 +9,7 @@ QT       += core gui charts sql datavisualization uitools
 TARGET = MSSPM_GuiDiagnostic
 TEMPLATE = lib
 
-PRECOMPILED_HEADER = /Users/satouhiroshiki/Desktop/NoaaInternshipGit/MSSPM/MSSPM_GuiSetup/precompiled_header.h
+PRECOMPILED_HEADER = /Users/hiro/Internship/NoaaInternshipGit/MSSPM/MSSPM_GuiSetup/precompiled_header.h
 CONFIG += precompile_header
 
 DEFINES += MSSPM_GUIDIAGNOSTIC_LIBRARY
@@ -40,78 +40,43 @@ unix {
     INSTALLS += target
 }
 
-INCLUDEPATH += "/Users/satouhiroshiki/boost/boost_1_76_0/"
+INCLUDEPATH += /Users/hiro/Downloads/boost_1_76_0
 INCLUDEPATH += "/usr/local/include/"
 
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfUtilities
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfUtilities
-#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfUtilities
 
-#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
-#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfUtilities.1.0.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfUtilities.1.0.0
-else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfUtilities.1.0.0
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfUtilities.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfUtilities.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfUtilities.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfUtilities
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfDatabase
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfDatabase
-#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfDatabase
-
-#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
-#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfDatabase.1.0.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfDatabase.1.0.0
-else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfDatabase.1.0.0
-
-INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
-DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
-
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lBeesAlgorithm
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lBeesAlgorithm
-#else:unix: LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lBeesAlgorithm
-
-#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
-#DEPENDPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lBeesAlgorithm.1.0.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lBeesAlgorithm.1.0.0
-else:unix: LIBS += -L$$PWD/../../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/ -lBeesAlgorithm.1.0.0
-
-INCLUDEPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
-DEPENDPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lMSSPM_ParameterEstimationNLoptAlgorithm
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lMSSPM_ParameterEstimationNLoptAlgorithm
-#else:unix: LIBS += -L$$PWD/../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lMSSPM_ParameterEstimationNLoptAlgorithm
-
-#INCLUDEPATH += $$PWD/../MSSPM_ParameterEstimationNLoptAlgorithm
-#DEPENDPATH += $$PWD/../MSSPM_ParameterEstimationNLoptAlgorithm
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/release/ -lnmfModels
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/debug/ -lnmfModels
-#else:unix: LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_1_GCC_64bit-Release/ -lnmfModels
-
-#INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfModels
-#DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfModels
-
-
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfModels.1.0.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfModels.1.0.0
-else:unix: LIBS += -L$$PWD/../../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfModels.1.0.0
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfModels.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfModels.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-nmfModels-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfModels.1.0.0
 
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfModels
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfModels
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lMSSPM_ParameterEstimationNLoptAlgorithm.1.0.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lMSSPM_ParameterEstimationNLoptAlgorithm.1.0.0
-else:unix: LIBS += -L$$PWD/../../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/ -lMSSPM_ParameterEstimationNLoptAlgorithm.1.0.0
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lBeesAlgorithm.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lBeesAlgorithm.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-BeesAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/ -lBeesAlgorithm.1.0.0
+
+INCLUDEPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
+DEPENDPATH += $$PWD/../../nmfSharedUtilities/BeesAlgorithm
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfDatabase.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfDatabase.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-nmfDatabase-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfDatabase.1.0.0
+
+INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
+DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfDatabase
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lMSSPM_ParameterEstimationNLoptAlgorithm.1.0.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lMSSPM_ParameterEstimationNLoptAlgorithm.1.0.0
+else:unix: LIBS += -L$$PWD/../../../builds/build-MSSPM_ParameterEstimationNLoptAlgorithm-Desktop_Qt_5_15_2_clang_64bit-Release/ -lMSSPM_ParameterEstimationNLoptAlgorithm.1.0.0
 
 INCLUDEPATH += $$PWD/../MSSPM_ParameterEstimationNLoptAlgorithm
 DEPENDPATH += $$PWD/../MSSPM_ParameterEstimationNLoptAlgorithm
