@@ -268,11 +268,9 @@ private:
     nmfSetup_Tab3*           Setup_Tab3_ptr;
     nmfSetup_Tab4*           Setup_Tab4_ptr;
     QDialog*                 m_PreferencesDlg;
-<<<<<<< HEAD
-    TableNamesDialog*        m_TableNames;
-=======
+
     TableNamesDialog*        m_TableNamesDlg;
->>>>>>> upstream/master
+
     QWidget*                 m_PreferencesWidget;
 	QWidget*                 m_TableNamesWidget;
     QTabWidget*              m_EstimatedParametersTW;
@@ -1489,10 +1487,7 @@ public slots:
     void menu_toggleManagerMode();
     void menu_toggleManagerModeViewer();
 
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/master
     void callback_PreferencesMShotOkPB();
     void callback_ErrorFound(std::string errorMsg);
     void callback_ManagerModeViewerClose(bool state);

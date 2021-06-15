@@ -112,11 +112,9 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
     readSettingsGuiOrientation(nmfConstantsMSSPM::ResetPositionAlso);
     readSettings();
 
-<<<<<<< HEAD
-    m_TableNames = new TableNamesDialog(this, m_DatabasePtr, m_ProjectDatabase);
-=======
+
     m_TableNamesDlg = new TableNamesDialog(this, m_DatabasePtr, m_ProjectDatabase);
->>>>>>> upstream/master
+
     initializePreferencesDlg();
 
     // Hide Progress Chart and Log dock widgets. Show them once user does their first MSSPM run.
@@ -137,10 +135,7 @@ nmfMainWindow::nmfMainWindow(QWidget *parent) :
         loadDatabase();
     }
 
-<<<<<<< HEAD
-//    initializeTableNamesDlg();
-=======
->>>>>>> upstream/master
+
     initializeMMode();
     this->setMouseTracking(true);
 
@@ -8670,20 +8665,12 @@ nmfMainWindow::context_Action(bool triggered)
 void
 nmfMainWindow::menu_showTableNames()
 {
-<<<<<<< HEAD
-    m_TableNames->loadTableNames();
-    m_TableNames->show();
-}
 
-
-
-
-=======
     m_TableNamesDlg->loadTableNames();
     m_TableNamesDlg->show();
 }
 
->>>>>>> upstream/master
+
 void
 nmfMainWindow::callback_NavigatorSelectionChanged()
 {
