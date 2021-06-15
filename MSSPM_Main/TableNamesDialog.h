@@ -3,8 +3,12 @@
  * @brief GUI definition for the TableNamesDialog dialog class
  *
  * This file contains the GUI definitions for the TableNamesDialog dialog class.
+<<<<<<< HEAD
  * The application preferences allow the user to customize various aspects
  * of the user interface.
+=======
+ * This GUI lists the names of the tables in the current database.
+>>>>>>> upstream/master
  *
  * @copyright
  * Public Domain Notice\n
@@ -41,7 +45,7 @@
 #include <QVBoxLayout>
 
 /**
- * @brief Preferences Dialog
+ * @brief TableNamesDialog Dialog
  *
  * The Dialog contains the name of database, and tables within a list widgets.
  *
@@ -49,6 +53,7 @@
 class TableNamesDialog : public QDialog
 {
     Q_OBJECT
+
     std::string                           m_ProjectDatabase;
     nmfDatabase*                          m_databasePtr;
     QWidget*                              m_TableNamesWidget;
@@ -62,18 +67,14 @@ public:
      * @brief TableNamesDialog : class constructor
      * @param parent : the parent widget (typically the main window)
      * @param databasePtr : the pointer to the application database
-     * @param ProjectDatabase : the name of the database.
+     * @param projectDatabase : the name of the database.
      */
     TableNamesDialog(QWidget*     parent,
-                      nmfDatabase* databasePtr,
-                     std::string ProjectDatabase);
+                     nmfDatabase* databasePtr,
+                     std::string  projectDatabase);
     virtual ~TableNamesDialog() {}
-
     /**
-     * @brief loadTableNames
-     * This function is called everytime a user try to view tables to occpuy the QListWidget m_TableNamesLW
-     * To adjust to the change which can be made on the tables of database through CLI, we isolated
-     * the functionality to load table names.
+     * @brief loadTableNames : This function is called whenever a user tries to view the list of tables in the current database.
      */
 
     void loadTableNames();

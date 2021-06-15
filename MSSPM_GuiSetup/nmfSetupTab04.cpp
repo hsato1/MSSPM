@@ -59,6 +59,7 @@ nmfSetup_Tab4::nmfSetup_Tab4(QTabWidget*  tabs,
     Setup_Tab4_PredationFormCMB         = Setup_Tabs->findChild<QComboBox    *>("Setup_Tab4_PredationFormCMB");
     Setup_Tab4_HarvestFormCMB           = Setup_Tabs->findChild<QComboBox    *>("Setup_Tab4_HarvestFormCMB");
     Setup_Tab4_CompetitionFormCMB       = Setup_Tabs->findChild<QComboBox    *>("Setup_Tab4_CompetitionFormCMB");
+    Setup_Tab4_ObsBiomassTypeCMB        = Setup_Tabs->findChild<QComboBox    *>("Setup_Tab4_ObsBiomassTypeCMB");
     Setup_Tab4_PrevPB                   = Setup_Tabs->findChild<QPushButton  *>("Setup_Tab4_PrevPB");
     Setup_Tab4_NextPB                   = Setup_Tabs->findChild<QPushButton  *>("Setup_Tab4_NextPB");
     Setup_Tab4_LoadPB                   = Setup_Tabs->findChild<QPushButton  *>("Setup_Tab4_LoadPB");
@@ -88,6 +89,8 @@ nmfSetup_Tab4::nmfSetup_Tab4(QTabWidget*  tabs,
             this,                              SLOT(callback_HarvestFormCMB(QString)));
     connect(Setup_Tab4_CompetitionFormCMB,     SIGNAL(currentTextChanged(QString)),
             this,                              SLOT(callback_CompetitionFormCMB(QString)));
+    connect(Setup_Tab4_ObsBiomassTypeCMB,     SIGNAL(currentTextChanged(QString)),
+            this,                              SLOT(callback_ObsBiomassTypeCMB(QString)));
     connect(Setup_Tab4_FontSizeCMB,            SIGNAL(currentTextChanged(QString)),
             this,                              SLOT(callback_FontSizeCMB(QString)));
     connect(Setup_Tab4_GrowthHighlightPB,      SIGNAL(clicked()),
@@ -543,6 +546,7 @@ nmfSetup_Tab4::callback_SavePB()
 {
     saveModel(true);
     setEstimatedParameterNames();
+    emit UpdateDiagnosticParameterChoices();
 }
 
 QStringList
@@ -562,19 +566,22 @@ nmfSetup_Tab4::setEstimatedParameterNames()
     QString harvestForm     = getHarvestFormCMB()->currentText();
     QString competitionForm = getCompetitionFormCMB()->currentText();
     QString predationForm   = getPredationFormCMB()->currentText();
+    QString obsBiomassType  = getObsBiomassType();
 
     m_EstimatedParameters.clear();
 
-    // Set Initial Biomass
-    m_EstimatedParameters.push_back("Initial Biomass");
+    // Set Initial Absolute Biomass
+    m_EstimatedParameters.push_back("Initial Absolute Biomass");
     runBox.parameter = "InitBiomass";
     runBox.state     = std::make_pair(true,true);
     EstimateRunBoxes.push_back(runBox);
 
     // Set SurveyQ
-    runBox.parameter = "SurveyQ";
-    m_EstimatedParameters.push_back("SurveyQ");
-    EstimateRunBoxes.push_back(runBox);
+    if (obsBiomassType == "Relative") {
+        runBox.parameter = "SurveyQ";
+        m_EstimatedParameters.push_back("SurveyQ");
+        EstimateRunBoxes.push_back(runBox);
+    }
 
     // Load Growth estimated parameters
     if (growthForm == "Linear") {
@@ -681,12 +688,12 @@ nmfSetup_Tab4::saveModel(bool RunChecks)
     }
     if (okToSave) {
         m_ProjectSettingsConfig = ModelName;
-        saveSettingsConfiguration(RunChecks,ModelName);
+        saveModelData(RunChecks,ModelName);
         readSettings();
         emit ModelSaved();
     }
 
-    emit UpdateInitialObservedBiomass();
+    emit UpdateInitialObservedBiomass(getObsBiomassType());
     emit UpdateInitialForecastYear();
     emit ReloadWidgets();
 
@@ -694,8 +701,8 @@ nmfSetup_Tab4::saveModel(bool RunChecks)
 
 
 bool
-nmfSetup_Tab4::saveSettingsConfiguration(bool verbose,
-                                         std::string CurrentSettingsName)
+nmfSetup_Tab4::saveModelData(bool verbose,
+                             std::string CurrentSettingsName)
 {
     std::string cmd;
     std::string errorMsg;
@@ -705,6 +712,7 @@ nmfSetup_Tab4::saveSettingsConfiguration(bool verbose,
     std::string PredationForm   = Setup_Tab4_PredationFormCMB->currentText().toStdString();
     std::string HarvestForm     = Setup_Tab4_HarvestFormCMB->currentText().toStdString();
     std::string CompetitionForm = Setup_Tab4_CompetitionFormCMB->currentText().toStdString();
+    std::string ObsBiomassType  = Setup_Tab4_ObsBiomassTypeCMB->currentText().toStdString();
     std::string StartYear       = std::to_string(Setup_Tab4_StartYearSB->value());
     std::string RunLength       = std::to_string(getRunLength());
     std::vector<std::string> fields;
@@ -726,7 +734,7 @@ nmfSetup_Tab4::saveSettingsConfiguration(bool verbose,
     else if (PredationForm == "Type III")
         NumberOfParameters += 3;
 
-    // For now, assume initial biomass is always estimated (adjust this assumption in Estimation Tab6)
+    // For now, assume initial absolute biomass is always estimated (adjust this assumption in Estimation Tab6)
     NumberOfParameters += 1;
 
     // Check if system exists, if so Update else REPLACE
@@ -737,7 +745,8 @@ nmfSetup_Tab4::saveSettingsConfiguration(bool verbose,
         cmd  = "UPDATE Systems SET";
         cmd += "   SystemName = '"                 + CurrentSettingsName +
                "', CarryingCapacity = "            + SystemK +
-               ",  GrowthForm = '"                 + GrowthForm +
+               ",  ObsBiomassType = '"             + ObsBiomassType +
+               "', GrowthForm = '"                 + GrowthForm +
                "', PredationForm = '"              + PredationForm +
                "', HarvestForm = '"                + HarvestForm +
                "', WithinGuildCompetitionForm = '" + CompetitionForm +
@@ -746,11 +755,12 @@ nmfSetup_Tab4::saveSettingsConfiguration(bool verbose,
                ",  RunLength = "                   + RunLength +
                " WHERE SystemName = '"             + CurrentSettingsName + "'";
     } else { // This means the system name does not exist so do a replace
-        cmd  = "REPLACE INTO Systems (SystemName,CarryingCapacity,GrowthForm,PredationForm,HarvestForm,";
+        cmd  = "REPLACE INTO Systems (SystemName,CarryingCapacity,ObsBiomassType,GrowthForm,PredationForm,HarvestForm,";
         cmd += "WithinGuildCompetitionForm,StartYear,RunLength,NumberOfParameters) ";
         cmd += "VALUES ('" +
                 CurrentSettingsName                + "', "  +
                 SystemK                            + ", '"  +
+                ObsBiomassType                     + "', '" +
                 GrowthForm                         + "', '" +
                 PredationForm                      + "', '" +
                 HarvestForm                        + "', '" +
@@ -804,7 +814,7 @@ nmfSetup_Tab4::loadWidgets()
 
     clearWidgets();
 
-    fields     = {"SystemName","CarryingCapacity","GrowthForm","PredationForm","HarvestForm","WithinGuildCompetitionForm",
+    fields     = {"SystemName","CarryingCapacity","ObsBiomassType","GrowthForm","PredationForm","HarvestForm","WithinGuildCompetitionForm",
                   "NumberOfRuns","StartYear","RunLength","TimeStep","Algorithm","Minimizer",
                   "ObjectiveCriterion","Scaling","GAGenerations","GAPopulationSize",
                   "GAMutationRate","GAConvergence","BeesNumTotal","BeesNumElite","BeesNumOther",
@@ -812,7 +822,7 @@ nmfSetup_Tab4::loadWidgets()
                   "BeesMaxGenerations","BeesNeighborhoodSize",
                   "NLoptUseStopVal","NLoptUseStopAfterTime","NLoptUseStopAfterIter",
                   "NLoptStopVal","NLoptStopAfterTime","NLoptStopAfterIter"};
-    queryStr   = "SELECT SystemName,CarryingCapacity,GrowthForm,PredationForm,HarvestForm,WithinGuildCompetitionForm,";
+    queryStr   = "SELECT SystemName,CarryingCapacity,ObsBiomassType,GrowthForm,PredationForm,HarvestForm,WithinGuildCompetitionForm,";
     queryStr  += "NumberOfRuns,StartYear,RunLength,TimeStep,Algorithm,Minimizer,ObjectiveCriterion,Scaling,";
     queryStr  += "GAGenerations,GAPopulationSize,GAMutationRate,GAConvergence,";
     queryStr  += "BeesNumTotal,BeesNumElite,BeesNumOther,BeesNumEliteSites,BeesNumBestSites,BeesNumRepetitions,";
@@ -847,6 +857,8 @@ nmfSetup_Tab4::loadWidgets()
     Setup_Tab4_StartYearSB->setValue(std::stoi(dataMap["StartYear"][0]));
     setRunLength(std::stoi(dataMap["RunLength"][0]));
     Setup_Tab4_EndYearLE->setText(QString::number(Setup_Tab4_StartYearSB->value()+getRunLength()));
+    Setup_Tab4_ObsBiomassTypeCMB->setCurrentIndex(-1);
+    Setup_Tab4_ObsBiomassTypeCMB->setCurrentText(QString::fromStdString(dataMap["ObsBiomassType"][0]));
 
     setEstimatedParameterNames();
 
@@ -1033,12 +1045,23 @@ nmfSetup_Tab4::callback_FontSizeCMB(QString theFontSize)
     Setup_Tab4_ModelEquationTE->setTextCursor( cursor );
 }
 
+QString
+nmfSetup_Tab4::getObsBiomassType()
+{
+    return Setup_Tab4_ObsBiomassTypeCMB->currentText();
+}
+
+void
+nmfSetup_Tab4::callback_ObsBiomassTypeCMB(QString obsBiomassType)
+{
+    emit ObservedBiomassType(obsBiomassType);
+}
+
 bool
 nmfSetup_Tab4::isGrowthFormHighlighted()
 {
     return Setup_Tab4_GrowthHighlightPB->isChecked();
 }
-
 
 void
 nmfSetup_Tab4::callback_GrowthHighlightPB()

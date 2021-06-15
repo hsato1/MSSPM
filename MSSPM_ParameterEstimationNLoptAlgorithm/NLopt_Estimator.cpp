@@ -316,11 +316,11 @@ NLopt_Estimator::objectiveFunction(unsigned n,
                       competitionBetaGuilds,competitionBetaGuildsGuilds,
                       predationRho,predationHandling,predationExponent,surveyQ);
 
-    // Since we may be estimating SurveyQ, need to multiply Observed Biomass by the SurveyQ
+    // Since we may be estimating SurveyQ, need to divide the Observed Biomass by the SurveyQ
     for (int species=0; species<int(ObsBiomassBySpeciesOrGuilds.size2()); ++species) {
         surveyQVal = surveyQ[species];
         for (int time=0; time<int(ObsBiomassBySpeciesOrGuilds.size1()); ++time) {
-            ObsBiomassBySpeciesOrGuilds(time,species) *= surveyQVal;
+            ObsBiomassBySpeciesOrGuilds(time,species) /= surveyQVal;
         }
     }
 
@@ -337,7 +337,10 @@ NLopt_Estimator::objectiveFunction(unsigned n,
     }
 
     for (int i=0; i<NumSpeciesOrGuilds; ++i) {
-        EstBiomassSpecies(0,i) = NLoptDataStruct.ObservedBiomassBySpecies(0,i)*surveyQ[i];
+        EstBiomassSpecies(0,i) = NLoptDataStruct.ObservedBiomassBySpecies(0,i)/surveyQ[i];
+//std::cout << "EBS(0," << i << "): " << EstBiomassSpecies(0,i) << ", " <<
+//         NLoptDataStruct.ObservedBiomassBySpecies(0,i) << ", " <<
+//         surveyQ[i] << std::endl;
     }
 
 
@@ -418,15 +421,15 @@ NLopt_Estimator::objectiveFunction(unsigned n,
 //std::cout << "EstBiomassVal: " << EstBiomassVal << std::endl;
 //}
 
-            //if (species == 0 && time == 1) {
-            //std::cout << "nlopt year: " << time << ", val = "
-            //          << EstBiomassSpecies(timeMinus1,species) << " + "
-            //          << GrowthTerm << " - "
-            //          << HarvestTerm << " - "
-            //          << CompetitionTerm << " - "
-            //          << PredationTerm << " = "
-            //          << EstBiomassVal << std::endl;
-            //}
+//if (species == 0 && time == 1) {
+//    std::cout << "nlopt year: " << time << ", val = "
+//              << EstBiomassSpecies(timeMinus1,species) << " + "
+//              << GrowthTerm << " - "
+//              << HarvestTerm << " - "
+//              << CompetitionTerm << " - "
+//              << PredationTerm << " = "
+//              << EstBiomassVal << std::endl;
+//}
 
 if (EstBiomassVal < 0) { // test code only
     EstBiomassVal = 0;
@@ -593,7 +596,6 @@ NLopt_Estimator::loadSurveyQParameterRanges(
             aPair = std::make_pair(dataStruct.SurveyQ[species],
                                    dataStruct.SurveyQ[species]);
         }
-qDebug() << "surveyQ data: " << aPair;
         parameterRanges.emplace_back(aPair);
     }
 }
@@ -697,14 +699,22 @@ NLopt_Estimator::estimateParameters(nmfStructsQt::ModelDataStruct &NLoptStruct,
     int NumEstParameters;
     int NumMultiRuns = 1;
     int NumSubRuns = 0;
+<<<<<<< HEAD
     double fitnessStdDev   = 0;
 //    std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
 //    std::chrono::_V2::system_clock::time_point startTimeSpecies;
+=======
+    double fitnessStdDev = 0;
+>>>>>>> upstream/master
     std::string bestFitnessStr = "TBD";
-    std::vector<std::pair<double,double> > ParameterRanges;
     std::string MaxOrMin;
+<<<<<<< HEAD
 
 //    startTimeSpecies = nmfUtils::startTimer();
+=======
+    std::vector<std::pair<double,double> > ParameterRanges;
+    QDateTime startTime = nmfUtilsQt::getCurrentTime();
+>>>>>>> upstream/master
 
     m_NLoptFcnEvals  = 0;
     m_NumObjFcnCalls = 0;
@@ -727,7 +737,6 @@ NLopt_Estimator::estimateParameters(nmfStructsQt::ModelDataStruct &NLoptStruct,
     NLoptPredationForm->loadParameterRanges(  ParameterRanges, NLoptStruct);
     loadSurveyQParameterRanges(               ParameterRanges, NLoptStruct);
     NumEstParameters = ParameterRanges.size();
-std::cout << "FIX: Remove delayMSec" << std::endl;
 std::cout << "*** NumEstParam: " << NumEstParameters << std::endl;
 for (int i=0; i< NumEstParameters; ++i) {
  std::cout << "  " <<    ParameterRanges[i].first << ", " << ParameterRanges[i].second << std::endl;
@@ -816,8 +825,7 @@ std::cout << "Found " + MaxOrMin + " fitness of: " << fitness << std::endl;
                                          NLoptStruct.ScalingAlgorithm,
                                          NLoptStruct.MultiRunModelFilename,
                                          fitness);
-                    nmfUtilsQt::delayMSec(100);
-
+                    QThread::msleep((unsigned long)(100));
                 } else {
                     emit RunCompleted(bestFitnessStr,NLoptStruct.showDiagnosticChart);
                 }
@@ -839,11 +847,15 @@ std::cout << "Found " + MaxOrMin + " fitness of: " << fitness << std::endl;
                                  NLoptStruct.MultiRunModelFilename);
     }
 
+<<<<<<< HEAD
 //    std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtils::elapsedTime(startTime);
 //std::cout << elapsedTimeStr << std::endl;
+=======
+    std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtilsQt::elapsedTime(startTime);
+std::cout << elapsedTimeStr << std::endl;
+>>>>>>> upstream/master
 
 //    stopRun(elapsedTimeStr,bestFitnessStr);
-
 
 }
 
@@ -880,24 +892,24 @@ NLopt_Estimator::createOutputStr(
     bestFitnessStr += "<br>Best Fitness (SSE) value of all runs:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + QString::number(bestFitness,'f',2).toStdString();
     bestFitnessStr += "<br>Std dev of Best Fitness values from all runs:&nbsp;&nbsp;" + QString::number(fitnessStdDev,'f',2).toStdString();
     bestFitnessStr += "<br><br><strong>Estimated Parameters:</strong>";
-    bestFitnessStr += convertValues1DToOutputStr("Initial Biomass:    ",m_EstInitBiomass,false);
-    bestFitnessStr += convertValues1DToOutputStr("Growth Rate:        ",m_EstGrowthRates,  false);
+    bestFitnessStr += convertValues1DToOutputStr("Initial Absolute Biomass:    ",m_EstInitBiomass,false);
+    bestFitnessStr += convertValues1DToOutputStr("Growth Rate:          ",       m_EstGrowthRates,  false);
     if (growthForm == "Logistic") {
-    bestFitnessStr += convertValues1DToOutputStr("Carrying Capacity:  ",m_EstCarryingCapacities,true);
+    bestFitnessStr += convertValues1DToOutputStr("Carrying Capacity:  ",         m_EstCarryingCapacities,true);
     }
 
     if (harvestForm == "Effort (qE)") {
-    bestFitnessStr += convertValues1DToOutputStr("Catchability:       ",m_EstCatchability,false);
+    bestFitnessStr += convertValues1DToOutputStr("Catchability:       ",         m_EstCatchability,false);
     }
     if (competitionForm == "NO_K") {
-    bestFitnessStr += convertValues2DToOutputStr("Competition (alpha):",m_EstAlpha);
+    bestFitnessStr += convertValues2DToOutputStr("Competition (alpha):",         m_EstAlpha);
     } else if ((competitionForm == "MS-PROD") ||
                (competitionForm == "AGG-PROD"))
     {
         if (competitionForm == "MS-PROD") {
-    bestFitnessStr += convertValues2DToOutputStr("Competition (beta::species):",m_EstBetaSpecies);
+    bestFitnessStr += convertValues2DToOutputStr("Competition (beta::species):", m_EstBetaSpecies);
         }
-    bestFitnessStr += convertValues2DToOutputStr("Competition (beta::guilds): ",m_EstBetaSpecies);
+    bestFitnessStr += convertValues2DToOutputStr("Competition (beta::guilds): ", m_EstBetaSpecies);
     }
 
     if ((predationForm == "Type I")  ||

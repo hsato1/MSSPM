@@ -6,7 +6,8 @@
 
 
 TableNamesDialog::TableNamesDialog(QWidget *parent,
-                                     nmfDatabase* databasePtr,
+
+                                   nmfDatabase* databasePtr,
                                    std::string ProjectDatabase) :
     QDialog(parent)
 {
@@ -21,7 +22,7 @@ TableNamesDialog::TableNamesDialog(QWidget *parent,
     m_TableNamesWidget = m_loader.load(&file,parent);;
     file.close();
     m_TableNamesOkPB = m_TableNamesWidget->findChild<QPushButton*>("TableNamesOkPB");
-    m_TableNamesOkPB->setCheckable(true);
+
     m_TableNamesLW   = m_TableNamesWidget->findChild<QListWidget*>("TableNamesLW");
     m_DatabaseNameLB = m_TableNamesWidget->findChild<QLabel*>("DatabaseNameLB");
 
@@ -33,12 +34,11 @@ TableNamesDialog::TableNamesDialog(QWidget *parent,
     this->setLayout(m_layout);
     this->setWindowTitle("Table Names");
 
-    connect(m_TableNamesOkPB, SIGNAL(clicked()),
-            this,           SLOT(hide()));
-
+    connect(m_TableNamesOkPB, SIGNAL(released()),
+            this,             SLOT(close()));
 }
 
-
+// This function will be called whenever a user tries to view the tables in the current database.
 
 void
 TableNamesDialog::loadTableNames()
@@ -60,10 +60,9 @@ TableNamesDialog::loadTableNames()
     } else {
         m_DatabaseNameLB->setText(QString::fromStdString(m_ProjectDatabase));
         for (int i=0; i<NumTables; ++i) {
-        m_TableNamesLW->addItem(QString::fromStdString(std::to_string(i+1) + ". " + dataMap["table_name"][i]));
+            m_TableNamesLW->addItem(QString::fromStdString(std::to_string(i+1) + ". " + dataMap["table_name"][i]));
         }
     }
-
 }
 
 

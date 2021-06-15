@@ -40,8 +40,10 @@
 #include "nmfCompetitionForm.h"
 #include "nmfPredationForm.h"
 
+#include <QDateTime>
 #include <QObject>
 #include <QString>
+#include <QThread>
 
 #include <exception>
 #include <nlopt.hpp>
