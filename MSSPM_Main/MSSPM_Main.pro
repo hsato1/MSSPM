@@ -88,9 +88,6 @@ INCLUDEPATH += /Users/satouhiroshiki/nlopt/build
 
 
 
-
-
-
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/release/ -lnmfUtilities.1.0.0
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/debug/ -lnmfUtilities.1.0.0
 else:unix: LIBS += -L$$PWD/../../../builds/build-nmfUtilities-Desktop_Qt_5_15_2_clang_64bit-Release/ -lnmfUtilities.1.0.0
@@ -204,9 +201,16 @@ else:unix: LIBS += -L$$PWD/../../../builds/build-nmfGuiComponentsMain-Desktop_Qt
 INCLUDEPATH += $$PWD/../../nmfSharedUtilities/nmfGuiComponentsMain
 DEPENDPATH += $$PWD/../../nmfSharedUtilities/nmfGuiComponentsMain
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../satouhiroshiki/nlopt/build/release/ -lnlopt.0.11.0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../satouhiroshiki/nlopt/build/debug/ -lnlopt.0.11.0
-else:unix: LIBS += -L$$PWD/../../../../../satouhiroshiki/nlopt/build/ -lnlopt.0.11.0
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../satouhiroshiki/nlopt/build/release/ -lnlopt.0.11.0
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../satouhiroshiki/nlopt/build/debug/ -lnlopt.0.11.0
+#else:unix: LIBS += -L$$PWD/../../../../../satouhiroshiki/nlopt/build/ -lnlopt.0.11.0
 
-INCLUDEPATH += $$PWD/../../../../../satouhiroshiki/nlopt/src/api
-DEPENDPATH += $$PWD/../../../../../satouhiroshiki/nlopt/src/api
+#INCLUDEPATH += $$PWD/../../../../../satouhiroshiki/nlopt/src/api
+#DEPENDPATH += $$PWD/../../../../../satouhiroshiki/nlopt/src/api
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../usr/local/lib/release/ -lnlopt.0.11.0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../usr/local/lib/debug/ -lnlopt.0.11.0
+else:unix: LIBS += -L$$PWD/../../../../../../usr/local/lib/ -lnlopt.0.11.0
+
+INCLUDEPATH += $$PWD/../../../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../../../usr/local/include

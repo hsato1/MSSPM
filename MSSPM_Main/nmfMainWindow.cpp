@@ -1684,6 +1684,8 @@ nmfMainWindow::getForecastInitialData(
         QString& growthForm,
         QString& harvestForm)
 {
+    std::cout << "print 5: in the get ForecastInitialData\n" << endl;
+
     int NumRecords;
     std::vector<std::string> fields;
     std::map<std::string, std::vector<std::string> > dataMap;
@@ -1745,6 +1747,8 @@ nmfMainWindow::getForecastInitialData(
 void
 nmfMainWindow::menu_toggleManagerMode()
 {
+    std::cout << "print 1\n" << endl;
+//    printf("print 1\n");
     bool ok;
     int numSpecies;
     QString growthForm;
@@ -1752,21 +1756,27 @@ nmfMainWindow::menu_toggleManagerMode()
     QStringList speciesList;
     bool showManagerMode = ! runningREMORA();
 
+    std::cout << "print 2: passed declaration\n" << endl;
+    printf("%d\n", showManagerMode);
     // Set state of relevant menu items
     m_UI->actionToggleManagerModeViewer->setEnabled(showManagerMode);
+    std::cout << "print 3\n" << endl;
     if (! showManagerMode) {
+        std::cout << "print 4: in the if statement\n" << endl;
         m_UI->actionToggleManagerModeViewer->setChecked(false);
     }
 
     if (showManagerMode) {
-
+        std::cout << "print 3 in if(showManagerMode)\n" << endl;
         saveSettings();
-
+        std::cout << "print 5 in if(showManagerMode), after saveSetting\n" << std::endl;
         // Get desired forecast data and initialize Remora with them
         int numYearsPerRun;
         int numRunsPerForecast;
         QString forecastName;
+        std::cout << "print 6 variable declaration after saveSetting\n" << std::endl;
         ok = getForecastInitialData(forecastName,numYearsPerRun,numRunsPerForecast,growthForm,harvestForm);
+        std::cout << "print 4 after local variable declaration\n" << endl;
         if (! ok and forecastName.isEmpty()) {
             m_UI->actionToggleManagerMode->setChecked(false);
             return;
@@ -1801,6 +1811,8 @@ nmfMainWindow::menu_toggleManagerMode()
         // Load species into manager mode
         getSpecies(numSpecies, speciesList);
         Remora_ptr->setSpeciesList(speciesList);
+
+        std::cout << "print 4: before setting to visible\n" << endl;
 
         // Show Manager Mode UI
         MModeDockWidget->setVisible(true);
@@ -9050,10 +9062,11 @@ nmfMainWindow::saveSettings() {
     settings->beginGroup("Output");
     int width = m_UI->MSSPMOutputControlsGB->width();
     settings->setValue("Width", width);
-std::cout << "===> SAVING: " << width << std::endl;
+    std::cout << "===> SAVING: " << width << std::endl;
     settings->endGroup();
 
     delete settings;
+    std::cout << "print 4 the end of saveSetting\n" << std::endl;
 }
 
 void

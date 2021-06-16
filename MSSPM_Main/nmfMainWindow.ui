@@ -310,21 +310,13 @@
           </property>
           <property name="minimumSize">
            <size>
-<<<<<<< HEAD
-            <width>0</width>
-=======
             <width>115</width>
->>>>>>> upstream/master
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-<<<<<<< HEAD
-            <width>16777215</width>
-=======
             <width>460</width>
->>>>>>> upstream/master
             <height>16777215</height>
            </size>
           </property>

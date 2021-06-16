@@ -699,22 +699,15 @@ NLopt_Estimator::estimateParameters(nmfStructsQt::ModelDataStruct &NLoptStruct,
     int NumEstParameters;
     int NumMultiRuns = 1;
     int NumSubRuns = 0;
-<<<<<<< HEAD
-    double fitnessStdDev   = 0;
-//    std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
-//    std::chrono::_V2::system_clock::time_point startTimeSpecies;
-=======
+
     double fitnessStdDev = 0;
->>>>>>> upstream/master
+
     std::string bestFitnessStr = "TBD";
     std::string MaxOrMin;
-<<<<<<< HEAD
 
-//    startTimeSpecies = nmfUtils::startTimer();
-=======
     std::vector<std::pair<double,double> > ParameterRanges;
     QDateTime startTime = nmfUtilsQt::getCurrentTime();
->>>>>>> upstream/master
+
 
     m_NLoptFcnEvals  = 0;
     m_NumObjFcnCalls = 0;
@@ -847,13 +840,10 @@ std::cout << "Found " + MaxOrMin + " fitness of: " << fitness << std::endl;
                                  NLoptStruct.MultiRunModelFilename);
     }
 
-<<<<<<< HEAD
-//    std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtils::elapsedTime(startTime);
-//std::cout << elapsedTimeStr << std::endl;
-=======
+
     std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtilsQt::elapsedTime(startTime);
 std::cout << elapsedTimeStr << std::endl;
->>>>>>> upstream/master
+
 
 //    stopRun(elapsedTimeStr,bestFitnessStr);
 

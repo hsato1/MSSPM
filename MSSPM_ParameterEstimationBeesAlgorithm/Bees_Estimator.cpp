@@ -57,12 +57,9 @@ Bees_Estimator::estimateParameters(nmfStructsQt::ModelDataStruct &beeStruct,
     std::string errorMsg;
     std::string bestFitnessStr;
     std::vector<double> lastBestParameters;
-<<<<<<< HEAD
-//    std::chrono::_V2::system_clock::time_point startTime = nmfUtils::startTimer();
-//    std::chrono::_V2::system_clock::time_point startTimeSpecies;
-=======
+
     QDateTime startTime = nmfUtilsQt::getCurrentTime();
->>>>>>> upstream/master
+
     std::vector<double> EstParameters;
     std::vector<double> MeanEstParameters;
     std::vector<double> stdDevParameters;
@@ -216,13 +213,10 @@ std::cout << "subRunNum: " << subRunNum << std::endl;
                                  beeStruct.MultiRunModelFilename);
     }
 
-<<<<<<< HEAD
-//    std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtils::elapsedTime(startTime);
-//    std::cout << elapsedTimeStr << std::endl;
-=======
+
     std::string elapsedTimeStr = "Elapsed runtime: " + nmfUtilsQt::elapsedTime(startTime);
     std::cout << elapsedTimeStr << std::endl;
->>>>>>> upstream/master
+
 
 //    stopRun(elapsedTimeStr,bestFitnessStr);
 }
