@@ -108,6 +108,7 @@ nmfEstimation_Tab6::nmfEstimation_Tab6(QTabWidget*  tabs,
     Estimation_Tab6_SetDeterministicCB            = Estimation_Tabs->findChild<QCheckBox   *>("Estimation_Tab6_SetDeterministicCB");
     Estimation_Tab6_EnsembleSetDeterministicCB    = Estimation_Tabs->findChild<QCheckBox   *>("Estimation_Tab6_EnsembleSetDeterministicCB");
     Estimation_Tab6_AddToReviewPB                 = Estimation_Tabs->findChild<QPushButton *>("Estimation_Tab6_AddToReviewPB");
+    Estimation_Tab6_NL_TimeUnitsLockPB            = Estimation_Tabs->findChild<QPushButton *>("Estimation_Tab6_NL_TimeUnitsLockPB");
 
     Estimation_Tab6_AddToReviewPB->setEnabled(false);
 
@@ -187,11 +188,14 @@ nmfEstimation_Tab6::nmfEstimation_Tab6(QTabWidget*  tabs,
     connect( Estimation_Tab6_SetDeterministicCB,      SIGNAL(stateChanged(int)),
              this,                                    SLOT(callback_SetDeterministicCB(int)));
     connect( Estimation_Tab6_EnsembleSetDeterministicCB, SIGNAL(stateChanged(int)),
-             this,                                       SLOT(callback_EnsembleSetDeterministicCB(int)));            
+             this,                                       SLOT(callback_EnsembleSetDeterministicCB(int)));
     connect(Estimation_Tab6_AddToReviewPB,           SIGNAL(clicked()),
             this,                                    SLOT(callback_AddToReviewPB()));
     connect(Estimation_Tab6_EstimateSurveyQCB,       SIGNAL(stateChanged(int)),
             this,                                    SLOT(callback_EstimateSurveyQCB(int)));
+    connect(Estimation_Tab6_NL_TimeUnitsLockPB,      SIGNAL(clicked(bool)),
+            this,                                    SLOT(callback_TimeUnitsLockPB(bool)));
+
 
     // Wire up signals/slots for the Estimate Run checkboxes
     for (QCheckBox* cbox : getAllEstimateCheckboxes()) {
@@ -212,11 +216,18 @@ nmfEstimation_Tab6::nmfEstimation_Tab6(QTabWidget*  tabs,
     // Initialize minimize function label map
     initializeDetStoMap();
 
+    // Initialize lock button
+    QIcon lockedIcon(":/icons/locked.png");
+    Estimation_Tab6_NL_TimeUnitsLockPB->setIcon(lockedIcon);
+    Estimation_Tab6_NL_StopAfterTimeUnitsCMB->setEnabled(false);
+    Estimation_Tab6_NL_TimeUnitsLockPB->setChecked(true);
+
     callback_EstimationAlgorithmCMB("Bees Algorithm");
     enableRunButton(true);
 
     callback_MinimizerTypeCMB(Estimation_Tab6_MinimizerTypeCMB->currentText());
     callback_MinimizerAlgorithmCMB(Estimation_Tab6_MinimizerAlgorithmCMB->currentText());
+
 }
 
 
@@ -974,7 +985,7 @@ nmfEstimation_Tab6::callback_EstimationAlgorithmCMB(QString algorithm)
     Estimation_Tab6_Bees_ParametersGB->hide();
     Estimation_Tab6_NL_ParametersGB->hide();
     Estimation_Tab6_MinimizerAlgorithmCMB->setEnabled(enableMinimizer);
-    Estimation_Tab6_MinimizerAlgorithmLBL->setEnabled(enableMinimizer);    
+    Estimation_Tab6_MinimizerAlgorithmLBL->setEnabled(enableMinimizer);
     Estimation_Tab6_MinimizerDetStoTypeLBL->setEnabled(enableMinimizer);
     Estimation_Tab6_MinimizerTypeCMB->setEnabled(enableMinimizer);
 
@@ -1226,8 +1237,10 @@ nmfEstimation_Tab6::addToMultiRunFile(const int& numRunsToAdd,
                                       QString& fullPath)
 {
     QString msg;
-    fullPath = QDir(QString::fromStdString(m_ProjectDir)).filePath("outputData");
-    fullPath = QDir(fullPath).filePath(QString::fromStdString(nmfConstantsMSSPM::MultiRunFilename));
+    if (fullPath.isEmpty()) { // Means it's not a Mohn's Rho multi-run
+        fullPath = QDir(QString::fromStdString(m_ProjectDir)).filePath("outputData");
+        fullPath = QDir(fullPath).filePath(QString::fromStdString(nmfConstantsMSSPM::MultiRunFilename));
+    }
     QFile file(fullPath);
 
     if (numRunsToAdd+currentNumberOfRuns > totalNumberOfRunsDesired) {
@@ -1337,7 +1350,7 @@ nmfEstimation_Tab6::callback_EnsembleAddPB()
     int currentNumberOfRuns      = Estimation_Tab6_EnsembleRunsSetLE->text().toInt();
     int totalNumberOfRunsDesired = Estimation_Tab6_EnsembleTotalRunsSB->value();
     int tmpSum                   = numRunsToAdd+currentNumberOfRuns;
-    QString fullPath;
+    QString fullPath = "";
 
     enableRunButton(false);
 
@@ -1386,6 +1399,15 @@ nmfEstimation_Tab6::clearEnsembleFile()
     m_EnsembleDialog->clear();
     enableEnsembleWidgets(true);
     m_EnsembleFilename = nmfConstantsMSSPM::MultiRunFilename;
+}
+
+void
+nmfEstimation_Tab6::clearMohnsRhoFile()
+{
+    QString fullPath = QDir(QString::fromStdString(m_ProjectDir)).filePath("outputData");
+    fullPath = QDir(fullPath).filePath(QString::fromStdString(nmfConstantsMSSPM::MohnsRhoRunFilename));
+    QFile file(fullPath);
+    file.remove();
 }
 
 void
@@ -1566,6 +1588,11 @@ nmfEstimation_Tab6::callback_EnsembleControlsGB(bool isChecked)
 {
     callback_EnsembleTotalRunsSB(Estimation_Tab6_EnsembleTotalRunsSB->value());
     enableEnsembleWidgets(! isChecked);
+
+    if (isChecked) {
+        loadEnsembleFile(QString::fromStdString(nmfConstantsMSSPM::MultiRunFilename),
+                         nmfConstantsMSSPM::VerboseOff);
+    }
 }
 
 
@@ -1623,12 +1650,17 @@ nmfEstimation_Tab6::callback_EnsembleUsingPctPB()
 void
 nmfEstimation_Tab6::callback_EnsembleLoadPB()
 {
-    loadEnsembleFile(QString::fromStdString(nmfConstantsMSSPM::MultiRunFilename));
+    loadEnsembleFile(QString::fromStdString(nmfConstantsMSSPM::MultiRunFilename),
+                     nmfConstantsMSSPM::VerboseOn);
 }
-void
-nmfEstimation_Tab6::loadEnsembleFile(QString ensembleFilename)
+
+
+bool
+nmfEstimation_Tab6::loadEnsembleFile(QString ensembleFilename,
+                                     const bool& verbose)
 {
 std::cout << "Loading: " << ensembleFilename.toStdString() << std::endl;
+    bool retv = true;
     int TotalNumRuns = 0;
     QString msg;
     QString fullPath = QDir(QString::fromStdString(m_ProjectDir)).filePath("outputData");
@@ -1651,10 +1683,14 @@ std::cout << "Loading: " << ensembleFilename.toStdString() << std::endl;
         enableEnsembleWidgets(false);
         m_EnsembleDialog->loadWidgets(ensembleFilename);
     } else {
-        QMessageBox::warning(Estimation_Tabs, "Warning",
-                             "\nNo previous Multi-Run/Ensemble file found to load.\n",
-                             QMessageBox::Ok);
+        if (verbose) {
+            QMessageBox::warning(Estimation_Tabs, "Warning",
+                                 "\nNo previous Multi-Run/Ensemble file found to load.\n",
+                                 QMessageBox::Ok);
+        }
+        retv = false;
     }
+    return retv;
 }
 
 void
@@ -1723,10 +1759,10 @@ nmfEstimation_Tab6::callback_EnsembleSetAllPB()
     int numRunsToAdd             = Estimation_Tab6_EnsembleTotalRunsSB->value();
     int currentNumberOfRuns      = Estimation_Tab6_EnsembleRunsSetLE->text().toInt();
     int totalNumberOfRunsDesired = numRunsToAdd;
-    QString fullPath;
+    QString fullPath = "";
 
-    Estimation_Tab6_EnsembleRunsSetLE->setText(QString::number(Estimation_Tab6_EnsembleTotalRunsSB->value()));
     if (addToMultiRunFile(numRunsToAdd,currentNumberOfRuns,totalNumberOfRunsDesired,fullPath)) {
+        Estimation_Tab6_EnsembleRunsSetLE->setText(QString::number(Estimation_Tab6_EnsembleTotalRunsSB->value()));
         m_EnsembleDialog->loadWidgets(QString::fromStdString(m_EnsembleFilename));
         if (numRunsToAdd+currentNumberOfRuns == totalNumberOfRunsDesired) {
             QString msg = "\nSaved Mult-Run Parameter File to:\n\n" + fullPath + "\n";
@@ -1871,4 +1907,14 @@ nmfEstimation_Tab6::saveSettings()
     settings->endGroup();
 
     delete settings;
+}
+
+void
+nmfEstimation_Tab6::callback_TimeUnitsLockPB(bool isChecked)
+{
+    QString iconName = (isChecked) ? ":/icons/locked.png" : ":/icons/unlocked.png";
+    QIcon icon(iconName);
+
+    Estimation_Tab6_NL_StopAfterTimeUnitsCMB->setEnabled(!isChecked);
+    Estimation_Tab6_NL_TimeUnitsLockPB->setIcon(icon);
 }

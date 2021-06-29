@@ -123,7 +123,7 @@
                      <string>Algorithms used to calculate parameter fitness values.</string>
                     </property>
                     <property name="whatsThis">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Objective Criteria&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;There are 3 types of Objective Criteria available. Each of these measures how well the estimated biomass fits the observed biomass.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[1] Least Squares&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The least squares algorithm uses the scaled estimated biomass and scaled observed biomass tables. It calculates the sum of the squares of the differences between these two biomass values over all species and over all years in the model. It uses the formula:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = ⵉ(Be - Bo)²&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;It then takes the common log (log10) of the final sum+1.  The 1 is added to the final sum so that the log10 won't ever produce a negative number (which it would do if the sum were between 0 and 1).  The closer this value is to 0, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[2] Maximum Likelihood&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The maximum likelihood algorithm uses the unscaled estimated biomass and unscaled observed biomass tables. It combines the values using the following formula:&lt;/p&gt;&lt;p&gt;fitness = Π{[1/sqrt(2πσ²)]*exp((-1/(2*σ²))(Bo-Be)²)}&lt;/p&gt;&lt;p&gt;where σ&lt;span style=&quot; color:#000000;&quot;&gt;²&lt;/span&gt; = (1/(N-1))*&lt;span style=&quot; color:#000000;&quot;&gt;ⵉ[(Bo-Bm)²]&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If you take the negative natural log (-ln), fitness becomes:&lt;/p&gt;&lt;p&gt;fitness = ln[sqrt(2π)] + ln[σ] + 0.5*[(Bo-Be)/σ]²&lt;/p&gt;&lt;p&gt;The closer this value is to 0, the better the fit.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[3] Model Efficiency&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The Nash-Sutcliffe Model Efficiency algorithm uses the scaled estimated biomass and scaled observed biomass tables as well as the mean of the scaled observed biomass.  It combines the values using the following formula: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = 1 - ⵉ(Be - Bo)² / ⵉ(Bo - Bm)² &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;to calculate a fitness value. The closer this value is to 1, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Objective Criteria&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;There are 3 types of Objective Criteria available. Each of these measures how well the estimated biomass fits the observed biomass.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[1] Least Squares&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The least squares algorithm uses the scaled estimated biomass and scaled observed biomass tables. It calculates the sum of the squares of the differences between these two biomass values over all species and over all years in the model. It uses the formula:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = ⵉ(Be - Bo)²&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;It then takes the common log (log10) of the final sum+1.  The 1 is added to the final sum so that the log10 won't ever produce a negative number (which it would do if the sum were between 0 and 1).  The closer this value is to 0, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[2] Maximum Likelihood&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The maximum likelihood algorithm uses the unscaled estimated biomass and unscaled observed biomass tables. It combines the values using the following formula:&lt;/p&gt;&lt;p&gt;fitness = Π{[1/sqrt(2πσ²)]*exp((-1/(2*σ²))(Bo-Be)²)}&lt;/p&gt;&lt;p&gt;where σ&lt;span style=&quot; color:#000000;&quot;&gt;²&lt;/span&gt; = (1/(N-1))*&lt;span style=&quot; color:#000000;&quot;&gt;ⵉ[(Bo-Bm)²]&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If you take the negative natural log (-ln), fitness becomes:&lt;/p&gt;&lt;p&gt;fitness = ln[sqrt(2π)] + ln[σ] + 0.5*[(Bo-Be)/σ]²&lt;/p&gt;&lt;p&gt;The closer this value is to 0, the better the fit.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[3] Model Efficiency&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The Nash-Sutcliffe Model Efficiency algorithm uses the scaled estimated biomass and scaled observed biomass tables as well as the mean of the scaled observed biomass.  It combines the values using the following formula: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = 1 - ⵉ(Be - Bo)² / ⵉ(Bo - Bm)² &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;to calculate a fitness value. The closer this value is to 1, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="text">
                      <string>Objective Criterion:</string>
@@ -167,7 +167,7 @@
                      <string>Algorithms used to calculate parameter fitness values.</string>
                     </property>
                     <property name="whatsThis">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Objective Criteria&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;There are 3 types of Objective Criteria available. Each of these measures how well the estimated biomass fits the observed biomass.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[1] Least Squares&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The least squares algorithm uses the scaled estimated biomass and scaled observed biomass tables. It calculates the sum of the squares of the differences between these two biomass values over all species and over all years in the model. It uses the formula:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = ⵉ(Be - Bo)²&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;It then takes the common log (log10) of the final sum+1.  The 1 is added to the final sum so that the log10 won't ever produce a negative number (which it would do if the sum were between 0 and 1).  The closer this value is to 0, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[2] Maximum Likelihood&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The maximum likelihood algorithm uses the unscaled estimated biomass and unscaled observed biomass tables. It combines the values using the following formula:&lt;/p&gt;&lt;p&gt;fitness = Π{[1/sqrt(2πσ²)]*exp((-1/(2*σ²))(Bo-Be)²)}&lt;/p&gt;&lt;p&gt;where σ&lt;span style=&quot; color:#000000;&quot;&gt;²&lt;/span&gt; = (1/(N-1))*&lt;span style=&quot; color:#000000;&quot;&gt;ⵉ[(Bo-Bm)²]&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If you take the negative natural log (-ln), fitness becomes:&lt;/p&gt;&lt;p&gt;fitness = ln[sqrt(2π)] + ln[σ] + 0.5*[(Bo-Be)/σ]²&lt;/p&gt;&lt;p&gt;The closer this value is to 0, the better the fit.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[3] Model Efficiency&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The Nash-Sutcliffe Model Efficiency algorithm uses the scaled estimated biomass and scaled observed biomass tables as well as the mean of the scaled observed biomass.  It combines the values using the following formula: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = 1 - ⵉ(Be - Bo)² / ⵉ(Bo - Bm)² &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;to calculate a fitness value. The closer this value is to 1, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Objective Criteria&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;There are 3 types of Objective Criteria available. Each of these measures how well the estimated biomass fits the observed biomass.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[1] Least Squares&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The least squares algorithm uses the scaled estimated biomass and scaled observed biomass tables. It calculates the sum of the squares of the differences between these two biomass values over all species and over all years in the model. It uses the formula:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = ⵉ(Be - Bo)²&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;It then takes the common log (log10) of the final sum+1.  The 1 is added to the final sum so that the log10 won't ever produce a negative number (which it would do if the sum were between 0 and 1).  The closer this value is to 0, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[2] Maximum Likelihood&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The maximum likelihood algorithm uses the unscaled estimated biomass and unscaled observed biomass tables. It combines the values using the following formula:&lt;/p&gt;&lt;p&gt;fitness = Π{[1/sqrt(2πσ²)]*exp((-1/(2*σ²))(Bo-Be)²)}&lt;/p&gt;&lt;p&gt;where σ&lt;span style=&quot; color:#000000;&quot;&gt;²&lt;/span&gt; = (1/(N-1))*&lt;span style=&quot; color:#000000;&quot;&gt;ⵉ[(Bo-Bm)²]&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If you take the negative natural log (-ln), fitness becomes:&lt;/p&gt;&lt;p&gt;fitness = ln[sqrt(2π)] + ln[σ] + 0.5*[(Bo-Be)/σ]²&lt;/p&gt;&lt;p&gt;The closer this value is to 0, the better the fit.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;[3] Model Efficiency&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;The Nash-Sutcliffe Model Efficiency algorithm uses the scaled estimated biomass and scaled observed biomass tables as well as the mean of the scaled observed biomass.  It combines the values using the following formula: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;fitness = 1 - ⵉ(Be - Bo)² / ⵉ(Bo - Bm)² &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;to calculate a fitness value. The closer this value is to 1, the better the fit.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="currentIndex">
                      <number>1</number>
@@ -1560,7 +1560,7 @@ with the non-assigned bees being assigned to random positions.</string>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
-                      <width>64</width>
+                      <width>84</width>
                       <height>20</height>
                      </size>
                     </property>
@@ -1651,7 +1651,7 @@ with the non-assigned bees being assigned to random positions.</string>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
-                      <width>64</width>
+                      <width>84</width>
                       <height>20</height>
                      </size>
                     </property>
@@ -1782,6 +1782,40 @@ with the non-assigned bees being assigned to random positions.</string>
                       <string>hour</string>
                      </property>
                     </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="Estimation_Tab6_NL_TimeUnitsLockPB">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>17</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>17</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Locks/unlocks the time units pulldown to the left</string>
+                    </property>
+                    <property name="statusTip">
+                     <string>Locks/unlocks the time units pulldown to the left</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
                    </widget>
                   </item>
                  </layout>

@@ -16,6 +16,7 @@ nmfDiagnostic_Tab2::nmfDiagnostic_Tab2(QTabWidget*  tabs,
     m_Logger          = logger;
     m_DatabasePtr     = databasePtr;
     m_ProjectDir      = projectDir;
+    m_isMohnsRhoRun   = false;
 
     // Load ui as a widget from disk
     QFile file(":/forms/Diagnostic/Diagnostic_Tab02.ui");
@@ -37,8 +38,8 @@ nmfDiagnostic_Tab2::nmfDiagnostic_Tab2(QTabWidget*  tabs,
     m_Diagnostic_Tabs->addTab(m_Diagnostic_Tab2_Widget, tr("2. Retrospective Analysis"));
 
     // Set default state of widgets
-    m_Diagnostic_Tab2_MinYearLE->setStyleSheet(nmfUtilsQt::ReadOnlyLineEditBgColor);
-    m_Diagnostic_Tab2_MaxYearLE->setStyleSheet(nmfUtilsQt::ReadOnlyLineEditBgColor);
+    m_Diagnostic_Tab2_MinYearLE->setStyleSheet(nmfUtilsQt::ReadOnlyLineEditBgColorLight);
+    m_Diagnostic_Tab2_MaxYearLE->setStyleSheet(nmfUtilsQt::ReadOnlyLineEditBgColorLight);
     m_Diagnostic_Tab2_MinYearLE->setReadOnly(true);
     m_Diagnostic_Tab2_MaxYearLE->setReadOnly(true);
 
@@ -214,6 +215,17 @@ nmfDiagnostic_Tab2::clearWidgets()
     setEndYearLE(0);
 }
 
+bool
+nmfDiagnostic_Tab2::isAMohnsRhoRun()
+{
+    return m_isMohnsRhoRun;
+}
+
+void
+nmfDiagnostic_Tab2::setIsMohnsRho(bool state)
+{
+    m_isMohnsRhoRun = state;
+}
 
 void
 nmfDiagnostic_Tab2::callback_NumPeelsSB(int numPeels)
@@ -266,6 +278,7 @@ nmfDiagnostic_Tab2::callback_RunPB()
     // where Σ goes from n=1 to x
     ranges.clear();
     for (int i=0; i<=NumPeeledYears; ++i) {
+std::cout << "range: " << StartYear << ", " << EndYear << std::endl;
         ranges.push_back(std::make_pair(StartYear,EndYear));
         if (isFromEnd) {
             ++EndYear;
@@ -274,6 +287,21 @@ nmfDiagnostic_Tab2::callback_RunPB()
         }
     }
 
+    m_isMohnsRhoRun = true;
     emit RunDiagnosticEstimation(ranges);
 
+}
+
+void
+nmfDiagnostic_Tab2::setWidgetsDark()
+{
+    nmfUtilsQt::setBackgroundLineEdit(m_Diagnostic_Tab2_MinYearLE,nmfUtilsQt::ReadOnlyLineEditBgColorDark);
+    nmfUtilsQt::setBackgroundLineEdit(m_Diagnostic_Tab2_MaxYearLE,nmfUtilsQt::ReadOnlyLineEditBgColorDark);
+}
+
+void
+nmfDiagnostic_Tab2::setWidgetsLight()
+{
+    nmfUtilsQt::setBackgroundLineEdit(m_Diagnostic_Tab2_MinYearLE,nmfUtilsQt::ReadOnlyLineEditBgColorLight);
+    nmfUtilsQt::setBackgroundLineEdit(m_Diagnostic_Tab2_MaxYearLE,nmfUtilsQt::ReadOnlyLineEditBgColorLight);
 }

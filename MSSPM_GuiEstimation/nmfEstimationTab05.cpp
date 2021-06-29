@@ -18,6 +18,8 @@ nmfEstimation_Tab5::nmfEstimation_Tab5(QTabWidget  *tabs,
     m_SModelAbsoluteBiomass = nullptr;
     m_SModelRelativeBiomass = nullptr;
     m_SModelCovariates      = nullptr;
+    // assuming that the default is light.
+    m_IsDark = false;
 
     m_Logger->logMsg(nmfConstants::Normal,"nmfEstimation_Tab5::nmfEstimation_Tab5");
 
@@ -119,9 +121,7 @@ nmfEstimation_Tab5::callback_ImportPB()
     if (isAbsoluteBiomassChecked()) {
         importAbsoluteBiomass();
     } else {
-//        importScalarValues();
         importRelativeBiomass();
-//        matchTableColumnWidths();
     }
 }
 
@@ -205,14 +205,15 @@ std::cout << "tableNameStr: " << tableNameStr.toStdString() << std::endl;
 bool
 nmfEstimation_Tab5::isAbsoluteBiomassChecked()
 {
-    return getObsBiomassType().contains("Absolute Biomass");
+    return ! m_DatabasePtr->isARelativeBiomassModel(m_ProjectSettingsConfig);
+//  return getObsBiomassType().contains("Absolute Biomass");
 }
 
-QString
-nmfEstimation_Tab5::getObsBiomassType()
-{
-    return Estimation_Tab5_ObsBiomassTypeLBL->text();
-}
+//QString
+//nmfEstimation_Tab5::getObsBiomassType()
+//{
+//    return Estimation_Tab5_ObsBiomassTypeLBL->text();
+//}
 
 void
 nmfEstimation_Tab5::setObsBiomassType(QString obsBiomassType)
@@ -313,7 +314,7 @@ nmfEstimation_Tab5::saveAbsoluteBiomass()
     for (int species=0; species<NumSpecies; ++species) {
         index = m_SModelAbsoluteBiomass->index(0,species);
         InitBiomass = index.data().toDouble();
-        if (InitBiomass > SpeciesKMin[species]) {            
+        if (InitBiomass > SpeciesKMin[species]) {
             errorMsg  = "\nFound: InitBiomass (" + std::to_string(InitBiomass) +
                     ") > SpeciesKMin (" + std::to_string(SpeciesKMin[species]) +
                     ") for Species: " + SpeNames[species];
@@ -724,7 +725,12 @@ nmfEstimation_Tab5::loadTableValuesFromDatabase(
                 // Make first row read-only
                 item->setEditable(i != 0);
                 if (i == 0) {
-                    item->setBackground(QBrush(QColor(240,240,240)));
+                    if (m_IsDark){
+                        item->setBackground(QBrush(QColor(103,110,113)));
+                    } else {
+                        item->setBackground(QBrush(QColor(211,211,211)));
+                    }
+//                  item->setBackground(QBrush(QColor(240,240,240)));
                     flags = item->flags();
                     flags &= ~(Qt::ItemIsSelectable | Qt::ItemIsEditable); // reset/clear the flag
                     item->setFlags(flags);
@@ -905,3 +911,10 @@ nmfEstimation_Tab5::callback_Rel2AbsScalarTVScrolled(int value)
     Estimation_Tab5_RelativeBiomassTV->blockSignals(false);
 }
 
+void
+nmfEstimation_Tab5::setIsDark(QString style){
+
+    m_IsDark = (style=="Dark");
+    loadWidgets();
+
+}

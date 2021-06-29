@@ -60,6 +60,7 @@ private:
     std::string  m_ProjectDir;
     std::string  m_ProjectSettingsConfig;
     int          m_RunLength;
+    bool         m_isMohnsRhoRun;
 
     void clearWidgets();
     int  getEndYearLE();
@@ -83,6 +84,7 @@ public:
                        std::string& projectDir);
     virtual ~nmfDiagnostic_Tab2();
 
+    void setIsMohnsRho(bool state);
     /**
      * @brief Gets the last year in the year range
      * @return The last year in the year range
@@ -109,6 +111,11 @@ public:
      */
     int     getStartYearLE();
     /**
+     * @brief Notifies the user if the run is a Mohns Rho run
+     * @return Boolean signifying if the user just started a Mohns Rho run
+     */
+    bool    isAMohnsRhoRun();
+    /**
      * @brief Loads the GUI widgets without any peels.  It calls the overloaded loadWidgets with a -1.
      */
     void    loadWidgets();
@@ -122,6 +129,9 @@ public:
      * @param StartYear : First year of range
      */
     void    setStartYearLE(int StartYear);
+
+    void    setWidgetsDark();
+    void    setWidgetsLight();
 
 signals:
     // void ResaveSystem();
@@ -149,4 +159,3 @@ public slots:
 };
 
 #endif
-

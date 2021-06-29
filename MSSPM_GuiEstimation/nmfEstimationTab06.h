@@ -139,6 +139,7 @@ class nmfEstimation_Tab6: public QObject
     QCheckBox*   Estimation_Tab6_SetDeterministicCB;
     QCheckBox*   Estimation_Tab6_EnsembleSetDeterministicCB;
     QPushButton* Estimation_Tab6_AddToReviewPB;
+    QPushButton* Estimation_Tab6_NL_TimeUnitsLockPB;
 
     void readSettings();
     bool saveSettingsConfiguration(bool verbose,std::string currentSettingsName);
@@ -148,13 +149,9 @@ class nmfEstimation_Tab6: public QObject
     QList<QCheckBox* > getAllEstimateCheckboxes();
     void initializeDetStoMap();
     void adjustNumberOfParameters();
-    bool addToMultiRunFile(const int& numRunsToAdd,
-                           const int& currentNumberOfRuns,
-                           const int& totalNumberOfRunsDesired,
-                           QString& filename);
+
     bool queryUserIfOkToClearMultiRunFile();
     void runEnsemble();
-    void runEstimation();
     bool passRunChecks(std::string& msg);
 
 public:
@@ -170,6 +167,13 @@ public:
                        nmfDatabase* databasePtr,
                        std::string& projectDir);
     virtual ~nmfEstimation_Tab6();
+
+    void runEstimation();
+    bool addToMultiRunFile(const int& numRunsToAdd,
+                           const int& currentNumberOfRuns,
+                           const int& totalNumberOfRunsDesired,
+                           QString& filename);
+    void clearMohnsRhoFile();
 
     /**
      * @brief Append the passed message to the output text edit widget
@@ -197,7 +201,8 @@ public:
     std::string getBeesNeighborhoodSize();
     std::string getBeesNumberOfRuns();
     std::string getEnsembleFilename();
-    void loadEnsembleFile(QString ensembleFile);
+    bool loadEnsembleFile(QString ensembleFile,
+                          const bool& verbose);
     void setEnsembleRuns(int value);
     void setEnsembleRunsSet(int value);
     bool isAMultiRun();
@@ -512,7 +517,7 @@ public Q_SLOTS:
                                 const bool enable,
                                 const bool checked);
     void callback_EstimateSurveyQCB(int state);
-
+    void callback_TimeUnitsLockPB(bool isChecked);
 };
 
 #endif // NMFESTIMATIONTAB6_H

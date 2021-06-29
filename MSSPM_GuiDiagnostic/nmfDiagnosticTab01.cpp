@@ -66,54 +66,12 @@ nmfDiagnostic_Tab1::~nmfDiagnostic_Tab1()
 void
 nmfDiagnostic_Tab1::callback_UpdateDiagnosticParameterChoices()
 {
-    int index;
-    int NumRecords;
-    std::vector<std::string> fields;
-    std::string queryStr;
-    std::map<std::string, std::vector<std::string> > dataMap;
-
-    // Get Systems data
-    fields     = {"SystemName","ObsBiomassType","GrowthForm","HarvestForm","WithinGuildCompetitionForm","PredationForm"};
-    queryStr   = "SELECT SystemName,ObsBiomassType,GrowthForm,HarvestForm,WithinGuildCompetitionForm,PredationForm";
-    queryStr  += " FROM Systems WHERE SystemName='" + m_ProjectSettingsConfig + "'";
-    dataMap    = m_DatabasePtr->nmfQueryDatabase(queryStr, fields);
-    NumRecords = dataMap["SystemName"].size();
-    if (NumRecords == 0) {
-        m_Logger->logMsg(nmfConstants::Error,"[Error 1] nmfDiagnostic_Tab1::callback_UpdateDiagnosticParameterChoices: No records found in table Systems for Name = "+m_ProjectSettingsConfig);
-        return;
-    }
-
-    // Figure out which items should be in the pulldown lists based upon the Model structure
-    Diagnostic_Tab1_SurfaceParameter1CMB->clear();
-    Diagnostic_Tab1_SurfaceParameter2CMB->clear();
-    Diagnostic_Tab1_SurfaceParameter1CMB->addItems(nmfConstantsMSSPM::VectorParameterNames);
-    Diagnostic_Tab1_SurfaceParameter2CMB->addItems(nmfConstantsMSSPM::VectorParameterNames);
-
-    // Check for appropriate items in parameter combo boxes.
-    if (dataMap["ObsBiomassType"][0] != "Relative") {
-        for (QComboBox* cmbox : {Diagnostic_Tab1_SurfaceParameter1CMB,Diagnostic_Tab1_SurfaceParameter2CMB}) {
-            index = cmbox->findText("SurveyQ");
-            cmbox->removeItem(index);
-        }
-    }
-    if (dataMap["GrowthForm"][0] != "Logistic") {
-        for (QComboBox* cmbox : {Diagnostic_Tab1_SurfaceParameter1CMB,Diagnostic_Tab1_SurfaceParameter2CMB}) {
-            index = cmbox->findText("Carrying Capacity (K)");
-            cmbox->removeItem(index);
-        }
-    }
-    if (dataMap["GrowthForm"][0] == "Null") {
-        for (QComboBox* cmbox : {Diagnostic_Tab1_SurfaceParameter1CMB,Diagnostic_Tab1_SurfaceParameter2CMB}) {
-            index = cmbox->findText("Growth Rate (r)");
-            cmbox->removeItem(index);
-        }
-    }
-    if (dataMap["HarvestForm"][0] != "Effort (qE)") {
-        for (QComboBox* cmbox : {Diagnostic_Tab1_SurfaceParameter1CMB,Diagnostic_Tab1_SurfaceParameter2CMB}) {
-            index = cmbox->findText("Catchability (q)");
-            cmbox->removeItem(index);
-        }
-    }
+    m_DatabasePtr->loadEstimatedVectorParameters(m_Logger,
+                                                 m_ProjectSettingsConfig,
+                                                 Diagnostic_Tab1_SurfaceParameter1CMB);
+    m_DatabasePtr->loadEstimatedVectorParameters(m_Logger,
+                                                 m_ProjectSettingsConfig,
+                                                 Diagnostic_Tab1_SurfaceParameter2CMB);
 }
 
 void
@@ -332,23 +290,23 @@ nmfDiagnostic_Tab1::callback_RunPB()
     int pctVariation   = m_Diagnostic_Tab1_PctVarSB->value();
     int numPoints      = m_Diagnostic_Tab1_NumPtsSB->value();
     int totalNumPoints = 2*numPoints;
+    int pInc = 0;
+    double sum = 0;
+    double tempVal = 0;
+    int m=0;
     double startVal;
     double inc;
     double estParameter;
-    double parameter1;
-    double parameter2;
+    double fitness,zscoreFitness;
+    double sigma;
+    double centerFitness = 0;
     double diagnosticParameterValue;
-    double parameter1DiagnosticValue;
-    double parameter2DiagnosticValue;
-    double fitness;
-    double parameter1StartVal;
-    double parameter1PctVar;
-    double parameter1PctInc;
-    double parameter1Inc;
-    double parameter2StartVal;
-    double parameter2PctVar;
-    double parameter2PctInc;
-    double parameter2Inc;
+    double parameter1,               parameter2;
+    double parameter1DiagnosticValue,parameter2DiagnosticValue;
+    double parameter1StartVal,       parameter2StartVal;
+    double parameter1PctVar,         parameter2PctVar;
+    double parameter1PctInc,         parameter2PctInc;
+    double parameter1Inc,            parameter2Inc;
     std::string Algorithm;
     std::string Minimizer;
     std::string ObjectiveCriterion;
@@ -364,6 +322,7 @@ nmfDiagnostic_Tab1::callback_RunPB()
     QStringList GuildNames;
     QStringList SpeciesOrGuildNames;
     std::vector<DiagnosticTuple> DiagnosticTupleVector;
+    std::vector<DiagnosticTuple> ZScoreDiagnosticTupleVector;
     DiagnosticTuple aDiagnosticTuple;
     std::string isAggProdStr;
     bool isAggProdBool;
@@ -372,8 +331,13 @@ nmfDiagnostic_Tab1::callback_RunPB()
     std::pair<QString,double> parameterItem;
     std::pair<QString,double> parameterItem1;
     std::pair<QString,double> parameterItem2;
+    QStringList vectorParameterNames = m_DatabasePtr->getVectorParameterNames(m_Logger,m_ProjectSettingsConfig);
     QString surfaceParameter1Name = getParameter1Name();
     QString surfaceParameter2Name = getParameter2Name();
+    QProgressDialog* progressDlg = new QProgressDialog(
+                "\nProcessing parameter variations...\n",
+                "Cancel", 0, vectorParameterNames.size(),
+                m_Diagnostic_Tabs);
 
     m_Logger->logMsg(nmfConstants::Normal,"");
     m_Logger->logMsg(nmfConstants::Normal,"Start Diagnostic");
@@ -416,10 +380,20 @@ nmfDiagnostic_Tab1::callback_RunPB()
         SpeciesOrGuildNames = SpeciesNames;
     }
 
+    progressDlg->setWindowModality(Qt::WindowModal);
+    progressDlg->setValue(pInc);
+    progressDlg->show();
+    progressDlg->setCancelButton(0);
+    progressDlg->setRange(0,nmfConstantsMSSPM::VectorParameterNames.size()+NumSpeciesOrGuilds+1); // +1 for final comment
+    progressDlg->update();
+    QCoreApplication::processEvents();
+
     m_Diagnostic_Tabs->setCursor(Qt::WaitCursor);
 
-    for (QString parameterName : nmfConstantsMSSPM::VectorParameterNames) {
-std::cout << "==> Processing: " << parameterName.toStdString() << std::endl;
+    for (QString parameterName : vectorParameterNames) {
+
+        nmfUtilsQt::updateProgressDlg(m_Logger,progressDlg,"Processing parameter: "+parameterName.toStdString(),pInc);
+
         EstParameter.clear();
         DiagnosticTupleVector.clear();
 
@@ -439,7 +413,7 @@ std::cout << "==> Processing: " << parameterName.toStdString() << std::endl;
             inc          = (estParameter - startVal)/numPoints;
             diagnosticParameterValue = startVal;
             for (int j=0; j<=totalNumPoints; ++j) {
-                try {   // RSK look at this
+                try {
                     parameterItem = std::make_pair(parameterName,diagnosticParameterValue);
                     fitness = calculateFitness(i,{parameterItem});
                 } catch (...) {
@@ -465,14 +439,20 @@ std::cout << "==> Processing: " << parameterName.toStdString() << std::endl;
         updateParameterTable(NumSpeciesOrGuilds, totalNumPoints,
                              Algorithm,Minimizer,ObjectiveCriterion,Scaling,
                              isAggProdStr,parameterName,DiagnosticTupleVector);
-
     }
 
     // Now save to the 2-parameter table
     // Calculate all parameter increment values and save to table to be
     // used in the 3d plots.
+    sigma = 0;
     DiagnosticTupleVector.clear();
+    ZScoreDiagnosticTupleVector.clear();
+    centerFitness = 0;
+    int numSurfacePoints = (totalNumPoints+1)*(totalNumPoints+1);
+    std::vector<double> fitnesses;
     for (int SpeciesNum=0; SpeciesNum<NumSpeciesOrGuilds; ++SpeciesNum) {
+        fitnesses.clear();
+        nmfUtilsQt::updateProgressDlg(m_Logger,progressDlg,"Calculating 2d parameter surfaces for: "+SpeciesOrGuildNames[SpeciesNum].toStdString(),pInc);
         parameter1                =  surfaceParameter1[SpeciesNum];
         parameter1StartVal        =  parameter1 * (1.0-pctVariation/100.0);
         parameter1Inc             = (parameter1 - parameter1StartVal)/numPoints;
@@ -490,15 +470,17 @@ std::cout << "==> Processing: " << parameterName.toStdString() << std::endl;
             for (int k=0; k<=totalNumPoints; ++k) {
                 parameterItem2 = std::make_pair(surfaceParameter2Name,parameter2DiagnosticValue);
                 fitness = calculateFitness(SpeciesNum,{parameterItem1,parameterItem2});
+                fitnesses.push_back(fitness);
+                if ((j == numPoints) && (k == numPoints)) {
+                    centerFitness = fitness;
+                }
                 if (fitness == -1) {
                     m_Diagnostic_Tabs->setCursor(Qt::ArrowCursor);
                     return;
                 }
                 aDiagnosticTuple = std::make_tuple(SpeciesOrGuildNames[SpeciesNum],
-                                                   parameter1PctVar,
-                                                   parameter2PctVar,
+                                                   parameter1PctVar,parameter2PctVar,
                                                    fitness);
-
                 DiagnosticTupleVector.push_back(aDiagnosticTuple);
                 parameter2DiagnosticValue += parameter2Inc;
                 parameter2PctVar          += parameter2PctInc;
@@ -506,10 +488,47 @@ std::cout << "==> Processing: " << parameterName.toStdString() << std::endl;
             parameter1DiagnosticValue += parameter1Inc;
             parameter1PctVar          += parameter1PctInc;
         }
-    }
-    updateParameterTable(Algorithm,Minimizer,ObjectiveCriterion,Scaling,
-                         isAggProdStr,DiagnosticTupleVector);
 
+        //
+        // Update the ZScore vector
+        //
+        // Calculate sigma = sqrt( sum(x-centerFitness)^2 / n )
+        m=0;
+        sum = 0;
+        tempVal = 0;
+        for (int j=0; j<=totalNumPoints; ++j) {
+            for (int k=0; k<=totalNumPoints; ++k) {
+                tempVal = (fitnesses[m++]-centerFitness);
+                sum += tempVal*tempVal;
+            }
+        }
+        sigma = std::sqrt(sum/(double)numSurfacePoints);
+
+        // Calculate ZScore = (x-centerFitness)/sigma
+        m = 0;
+        parameter1PctVar = -pctVariation;
+        parameter1PctInc = -2*parameter1PctVar/totalNumPoints;
+        for (int j=0; j<=totalNumPoints; ++j) {
+            parameter2PctVar = -pctVariation;
+            parameter2PctInc = -2*parameter2PctVar/totalNumPoints;
+            for (int k=0; k<=totalNumPoints; ++k) {
+                zscoreFitness = (fitnesses[m++]-centerFitness)/sigma;
+                aDiagnosticTuple = std::make_tuple(SpeciesOrGuildNames[SpeciesNum],
+                                                   parameter1PctVar,parameter2PctVar,
+                                                   zscoreFitness);
+                ZScoreDiagnosticTupleVector.push_back(aDiagnosticTuple);
+                parameter2PctVar += parameter2PctInc;
+            }
+            parameter1PctVar += parameter1PctInc;
+        }
+    }
+
+    nmfUtilsQt::updateProgressDlg(m_Logger,progressDlg,"Saving diagnostic data to database. One moment please.",pInc);
+    updateParameterTable(Algorithm,Minimizer,ObjectiveCriterion,Scaling,
+                         isAggProdStr,"Absolute",DiagnosticTupleVector);
+    updateParameterTable(Algorithm,Minimizer,ObjectiveCriterion,Scaling,
+                         isAggProdStr,"ZScore",ZScoreDiagnosticTupleVector);
+    progressDlg->close();
 
     m_Diagnostic_Tabs->setCursor(Qt::ArrowCursor);
 
@@ -520,6 +539,8 @@ std::cout << "==> Processing: " << parameterName.toStdString() << std::endl;
     emit SetChartType("Diagnostics","Parameter Profiles");
 
 }
+
+
 
 double
 nmfDiagnostic_Tab1::calculateFitness(const int& SpeciesOrGuildNum,
@@ -987,6 +1008,7 @@ nmfDiagnostic_Tab1::updateParameterTable(const std::string& Algorithm,
                                          const std::string& ObjectiveCriterion,
                                          const std::string& Scaling,
                                          const std::string& isAggProd,
+                                         const std::string& SurfaceType,
                                          std::vector<DiagnosticTuple>& DiagnosticTupleVector)
 {
    int m;
@@ -996,8 +1018,9 @@ nmfDiagnostic_Tab1::updateParameterTable(const std::string& Algorithm,
    cmd = "DELETE FROM DiagnosticSurface WHERE Algorithm = '" + Algorithm +
            "' AND Minimizer = '" + Minimizer +
            "' AND ObjectiveCriterion = '" + ObjectiveCriterion +
-           "' AND Scaling = '" + Scaling +
-           "' AND isAggProd = " + isAggProd;
+           "' AND Scaling = '"   + Scaling +
+           "' AND isAggProd = "  + isAggProd +
+           "  AND Type = '"      + SurfaceType + "'";
    errorMsg = m_DatabasePtr->nmfUpdateDatabase(cmd);
    if (nmfUtilsQt::isAnError(errorMsg)) {
        m_Logger->logMsg(nmfConstants::Error,"[Error 1a] UpdateParameterTable: DELETE error: " + errorMsg);
@@ -1006,7 +1029,7 @@ nmfDiagnostic_Tab1::updateParameterTable(const std::string& Algorithm,
    }
 
    m = 0;
-   cmd = "INSERT INTO DiagnosticSurface (Algorithm, Minimizer,ObjectiveCriterion,Scaling,isAggProd,SpeName,parameter1PctVar,parameter2PctVar,Fitness) VALUES ";
+   cmd = "INSERT INTO DiagnosticSurface (Algorithm, Minimizer,ObjectiveCriterion,Scaling,isAggProd,SpeName,Type,parameter1PctVar,parameter2PctVar,Fitness) VALUES ";
    for (unsigned j=0; j<DiagnosticTupleVector.size(); ++j) {
        cmd += "('"   + Algorithm +
                "','" + Minimizer +
@@ -1014,6 +1037,7 @@ nmfDiagnostic_Tab1::updateParameterTable(const std::string& Algorithm,
                "','" + Scaling +
                "',"  + isAggProd +
                ",'"  + std::get<0>(DiagnosticTupleVector[m]).toStdString() +
+               "','" + SurfaceType +
                "',"  + std::to_string(std::get<1>(DiagnosticTupleVector[m])) +
                ","   + std::to_string(std::get<2>(DiagnosticTupleVector[m])) +
                ","   + std::to_string(std::get<3>(DiagnosticTupleVector[m])) + "),";

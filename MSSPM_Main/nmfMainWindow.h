@@ -268,11 +268,9 @@ private:
     nmfSetup_Tab3*           Setup_Tab3_ptr;
     nmfSetup_Tab4*           Setup_Tab4_ptr;
     QDialog*                 m_PreferencesDlg;
-
     TableNamesDialog*        m_TableNamesDlg;
-
     QWidget*                 m_PreferencesWidget;
-	QWidget*                 m_TableNamesWidget;
+    QWidget*                 m_TableNamesWidget;
     QTabWidget*              m_EstimatedParametersTW;
     std::map<QString,QTableView*> m_EstimatedParametersMap;
     nmfViewerWidget*         m_MModeViewerWidget;
@@ -639,7 +637,7 @@ private:
                                      std::vector<std::vector<double> > &MinData,
                                      std::vector<std::vector<double> > &MaxData,
                                      int &NumInteractionParameters);
-    bool loadParameters(nmfStructsQt::ModelDataStruct &m_DataStruct,
+    bool loadParameters(nmfStructsQt::ModelDataStruct& dataStruct,
                         const bool& verbose);
     void loadSummaryStatisticsModel(
             const int& NumSpeciesOrGuilds,
@@ -782,6 +780,8 @@ private:
 //            std::map<std::string, std::vector<std::string> > &dataMapCatch,
 //            QString &ScaleStr,
 //            double &ScaleVal);
+    bool isAMohnsRhoMultiRun();
+    bool isAMultiOrMohnsRhoRun();
     void showChartTableVsTime(
             const std::string &label,
             const int &NumSpecies,
@@ -932,9 +932,9 @@ private:
     void setDefaultDockWidgetsVisibility(
             const QString& actionName,
             QAction* action);
-    void QueryUserForMultiRunFilenames(
-            QString& multiRunSpeciesFilename,
-            QString& multiRunModelFilename);
+//    void QueryUserForMultiRunFilenames(
+//            QString& multiRunSpeciesFilename,
+//            QString& multiRunModelFilename);
     void averageBiomassAndDisplay(QString& fullSpeciesPath);
     void updateBiomassEnsembleTable(
             const int& RunNumber,
@@ -1034,7 +1034,7 @@ public slots:
     /**
      * @brief Callback invoked when user Runs an Estimation
      */
-    void callback_CheckEstimationTablesAndRun();
+    void callback_CheckAllEstimationTablesAndRun();
     /**
      * @brief Callback invoked to clear all of the Estimation tables. This happens
      * if the user selects a new Project.
@@ -1249,9 +1249,8 @@ public slots:
                             QString outputSpecies);
     /**
      * @brief Callback invoked when user selects a Retrospective Analysis chart to view
-     * @return Boolean describing a successful display (True) or error getting supporting data (False)
      */
-    bool callback_ShowChartMohnsRho();
+    void callback_ShowChartMohnsRho();
     /**
      * @brief Callback invoked when user selects a Scenario chart to view
      * @param SortedForecastLabels : list of Forecast labels to show on the plot
@@ -1376,7 +1375,7 @@ public slots:
      * @brief Exports the current database to a .sql disk file
      */
     void menu_exportDatabase();
-	/**
+    /**
      * @brief Export all databases to individual .sql disk files
      */
     void menu_exportAllDatabases();
@@ -1486,7 +1485,6 @@ public slots:
     void menu_whatsThis();
     void menu_toggleManagerMode();
     void menu_toggleManagerModeViewer();
-
 
     void callback_PreferencesMShotOkPB();
     void callback_ErrorFound(std::string errorMsg);
